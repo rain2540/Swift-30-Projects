@@ -31,13 +31,13 @@ class PhotoCommentViewController: UIViewController {
     NotificationCenter.default.addObserver(
       self,
       selector: Selector.keyboardWillShowHandler,
-      name: NSNotification.Name.UIKeyboardWillShow,
+      name: UIResponder.keyboardWillShowNotification,
       object: nil
     )
     NotificationCenter.default.addObserver(
       self,
       selector: Selector.keyboardWillHideHandler,
-      name: NSNotification.Name.UIKeyboardWillHide,
+      name: UIResponder.keyboardWillHideNotification,
       object: nil
     )
   }
@@ -46,8 +46,8 @@ class PhotoCommentViewController: UIViewController {
     NotificationCenter.default.removeObserver(self)
   }
   
-  fileprivate func adjustInsetForKeyboard(isShow: Bool, notification: Notification) {
-    guard let value = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue else {
+  private func adjustInsetForKeyboard(isShow: Bool, notification: Notification) {
+    guard let value = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue else {
       return
     }
     let keyboardFrame = value.cgRectValue
@@ -56,19 +56,19 @@ class PhotoCommentViewController: UIViewController {
     scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
   }
   
-  @objc func dismissKeyboard() {
+  @objc fileprivate func dismissKeyboard() {
     view.endEditing(true)
   }
   
-  @objc func keyboardWillShow(notification: Notification) {
+  @objc fileprivate func keyboardWillShow(notification: Notification) {
     adjustInsetForKeyboard(isShow: true, notification: notification)
   }
   
-  @objc func keyboardWillHide(notification: Notification) {
+  @objc fileprivate func keyboardWillHide(notification: Notification) {
     adjustInsetForKeyboard(isShow: false, notification: notification)
   }
   
-  @objc func openZoomingController(sender: AnyObject) {
+  @objc fileprivate func openZoomingController(sender: AnyObject) {
     performSegue(withIdentifier: "zooming", sender: nil)
   }
   

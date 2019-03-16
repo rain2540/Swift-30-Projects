@@ -55,15 +55,16 @@ class ViewController: UIViewController {
       let vc = segue.destination as! DetailViewController
       let indexPath = todoTableView.indexPathForSelectedRow
       if let indexPath = indexPath {
-        vc.todo = todos[(indexPath as NSIndexPath).row]
+        vc.todo = todos[indexPath.row]
       }
     }
   }
 }
 
 extension ViewController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    
+  func tableView(_ tableView: UITableView,
+                 numberOfRowsInSection section: Int) -> Int
+  {
     if todos.count != 0 {
       return todos.count
     } else {
@@ -72,13 +73,15 @@ extension ViewController: UITableViewDataSource {
       setMessageLabel(messageLabel, frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height), text: "No data is currently available.", textColor: UIColor.black, numberOfLines: 0, textAlignment: NSTextAlignment.center, font: UIFont(name:"Palatino-Italic", size: 20)!)
       
       self.todoTableView.backgroundView = messageLabel
-      self.todoTableView.separatorStyle = UITableViewCellSeparatorStyle.none
+      self.todoTableView.separatorStyle = UITableViewCell.SeparatorStyle.none
       
       return 0
     }
   }
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView,
+                 cellForRowAt indexPath: IndexPath) -> UITableViewCell
+  {
     let cellIdentifier: String = "todoCell"
     let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
     
@@ -96,20 +99,28 @@ extension ViewController: UITableViewDelegate {
   }
   
   // Delete the cell
-  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-    if editingStyle == UITableViewCellEditingStyle.delete {
+  func tableView(_ tableView: UITableView,
+                 commit editingStyle: UITableViewCell.EditingStyle,
+                 forRowAt indexPath: IndexPath)
+  {
+    if editingStyle == UITableViewCell.EditingStyle.delete {
       todos.remove(at: (indexPath as NSIndexPath).row)
-      todoTableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+      todoTableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
     }
   }
   
   // Move the cell
-  func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+  func tableView(_ tableView: UITableView,
+                 canMoveRowAt indexPath: IndexPath) -> Bool
+  {
     return self.isEditing
   }
   
-  func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-    let todo = todos.remove(at: (sourceIndexPath as NSIndexPath).row)
-    todos.insert(todo, at: (destinationIndexPath as NSIndexPath).row)
+  func tableView(_ tableView: UITableView,
+                 moveRowAt sourceIndexPath: IndexPath,
+                 to destinationIndexPath: IndexPath)
+  {
+    let todo = todos.remove(at: sourceIndexPath.row)
+    todos.insert(todo, at: destinationIndexPath.row)
   }
 }

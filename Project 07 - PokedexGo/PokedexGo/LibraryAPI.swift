@@ -12,10 +12,14 @@ class LibraryAPI: NSObject {
   static let sharedInstance = LibraryAPI()
   let persistencyManager = PersistencyManager()
   
-  fileprivate override init() {
+  private override init() {
     super.init()
     
-    NotificationCenter.default.addObserver(self, selector:#selector(LibraryAPI.downloadImage(_:)), name: NSNotification.Name(rawValue: downloadImageNotification), object: nil)
+    NotificationCenter.default
+        .addObserver(self,
+                     selector:#selector(LibraryAPI.downloadImage(_:)),
+                     name: NSNotification.Name(rawValue: downloadImageNotification),
+                     object: nil)
   }
   
   deinit {
@@ -26,16 +30,16 @@ class LibraryAPI: NSObject {
     return pokemons
   }
   
-  func downloadImg(_ url: String) -> (UIImage) {
+  func downloadImg(_ url: String) -> UIImage {
     let aUrl = URL(string: url)
     let data = try? Data(contentsOf: aUrl!)
     let image = UIImage(data: data!)
     return image!
   }
   
-  func downloadImage(_ notification: Notification) {
+  @objc func downloadImage(_ notification: Notification) {
     // retrieve info from notification
-    let userInfo = (notification as NSNotification).userInfo as! [String: AnyObject]
+    let userInfo = notification.userInfo as! [String: AnyObject]
     let pokeImageView = userInfo["pokeImageView"] as! UIImageView?
     let pokeImageUrl = userInfo["pokeImageUrl"] as! String
     
@@ -44,7 +48,7 @@ class LibraryAPI: NSObject {
       if imageViewUnWrapped.image == nil {
         
         DispatchQueue.global().async {
-          let downloadedImage = self.downloadImg(pokeImageUrl as String)
+          let downloadedImage = self.downloadImg(pokeImageUrl)
           DispatchQueue.main.async {
             imageViewUnWrapped.image = downloadedImage
             self.persistencyManager.saveImage(downloadedImage, filename: URL(string: pokeImageUrl)!.lastPathComponent)
