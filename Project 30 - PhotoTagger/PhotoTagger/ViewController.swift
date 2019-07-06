@@ -90,7 +90,6 @@ extension ViewController : UIImagePickerControllerDelegate, UINavigationControll
 let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
 
     guard let image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage else {
-      print("Info did not have the required UIImage for the Original Image")
       dismiss(animated: true)
       return
     }
@@ -148,7 +147,6 @@ extension ViewController {
           upload.validate()
           upload.responseJSON { response in
             guard response.result.isSuccess else {
-              print("Error while uploading file: \(response.result.error)")
               completion([String](), [PhotoColor]())
               return
             }
@@ -157,12 +155,9 @@ extension ViewController {
               let uploadedFiles = responseJSON["uploaded"] as? [Any],
               let firstFile = uploadedFiles.first as? [String: Any],
               let firstFileID = firstFile["id"] as? String else {
-                print("Invalid information received from service")
                 completion([String](), [PhotoColor]())
                 return
             }
-            
-            print("Content uploaded with ID: \(firstFileID)")
             
             self.downloadTags(contentID: firstFileID) { tags in
               self.downloadColors(contentID: firstFileID) { colors in
@@ -182,7 +177,6 @@ extension ViewController {
       .responseJSON { response in
         
         guard response.result.isSuccess else {
-          print("Error while fetching tags: \(response.result.error)")
           completion([String]())
           return
         }
@@ -209,7 +203,6 @@ extension ViewController {
       .responseJSON { response in
         
         guard response.result.isSuccess else {
-          print("Error while fetching colors: \(response.result.error)")
           completion([PhotoColor]())
           return
         }

@@ -18,8 +18,8 @@ public enum ScalingMode {
 
 open class VideoSplashViewController: UIViewController {
 
-  private let moviePlayer = AVPlayerViewController()
-  private var moviePlayerSoundLevel: Float = 1.0
+  fileprivate let moviePlayer = AVPlayerViewController()
+  fileprivate var moviePlayerSoundLevel: Float = 1.0
   open var contentURL: URL? {
     didSet {
       setMoviePlayer(contentURL!)
@@ -34,23 +34,20 @@ open class VideoSplashViewController: UIViewController {
       view.backgroundColor = backgroundColor
     }
   }
-
   open var sound: Bool = true {
     didSet {
       if sound {
         moviePlayerSoundLevel = 1.0
-      } else {
+      }else{
         moviePlayerSoundLevel = 0.0
       }
     }
   }
-
   open var alpha: CGFloat = CGFloat() {
     didSet {
       moviePlayer.view.alpha = alpha
     }
   }
-
   open var alwaysRepeat: Bool = true {
     didSet {
       if alwaysRepeat {
@@ -61,18 +58,15 @@ open class VideoSplashViewController: UIViewController {
       }
     }
   }
-    
   open var fillMode: ScalingMode = .resizeAspectFill {
     didSet {
       switch fillMode {
       case .resize:
-        moviePlayer.videoGravity = AVLayerVideoGravity.resize
-
+        moviePlayer.videoGravity = convertToAVLayerVideoGravity(AVLayerVideoGravity.resize.rawValue)
       case .resizeAspect:
-        moviePlayer.videoGravity = AVLayerVideoGravity.resizeAspect
-
+        moviePlayer.videoGravity = convertToAVLayerVideoGravity(AVLayerVideoGravity.resizeAspect.rawValue)
       case .resizeAspectFill:
-        moviePlayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        moviePlayer.videoGravity = convertToAVLayerVideoGravity(AVLayerVideoGravity.resizeAspectFill.rawValue)
       }
     }
   }
@@ -89,7 +83,7 @@ open class VideoSplashViewController: UIViewController {
     NotificationCenter.default.removeObserver(self)
   }
 
-  private func setMoviePlayer(_ url: URL) {
+  fileprivate func setMoviePlayer(_ url: URL){
     let videoCutter = VideoCutter()
     videoCutter.cropVideoWithUrl(videoUrl: url, startTime: startTime, duration: duration) { (videoPath, error) -> Void in
       if let path = videoPath as URL? {
@@ -112,8 +106,13 @@ open class VideoSplashViewController: UIViewController {
     super.didReceiveMemoryWarning()
   }
   
-  @objc private func playerItemDidReachEnd() {
+  @objc func playerItemDidReachEnd() {
     moviePlayer.player?.seek(to: CMTime.zero)
     moviePlayer.player?.play()
   }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToAVLayerVideoGravity(_ input: String) -> AVLayerVideoGravity {
+	return AVLayerVideoGravity(rawValue: input)
 }

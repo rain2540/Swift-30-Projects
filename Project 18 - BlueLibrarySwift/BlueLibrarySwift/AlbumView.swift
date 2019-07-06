@@ -22,7 +22,7 @@ class AlbumView: UIView {
     super.init(frame: frame)
     commonInit()
     
-    NotificationCenter.default.post(name: .BLDownloadImage, object: self, userInfo: ["imageView": coverImageView, "coverUrl" : coverUrl])
+    NotificationCenter.default.post(name: .BLDownloadImage, object: self, userInfo: ["imageView": coverImageView ?? UIImage(), "coverUrl" : coverUrl])
   }
   
   private func commonInit() {

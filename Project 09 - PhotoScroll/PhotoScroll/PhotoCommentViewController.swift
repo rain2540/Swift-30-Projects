@@ -46,7 +46,7 @@ class PhotoCommentViewController: UIViewController {
     NotificationCenter.default.removeObserver(self)
   }
   
-  private func adjustInsetForKeyboard(isShow: Bool, notification: Notification) {
+  fileprivate func adjustInsetForKeyboard(isShow: Bool, notification: Notification) {
     guard let value = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue else {
       return
     }
@@ -56,19 +56,19 @@ class PhotoCommentViewController: UIViewController {
     scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
   }
   
-  @objc fileprivate func dismissKeyboard() {
+  @objc func dismissKeyboard() {
     view.endEditing(true)
   }
   
-  @objc fileprivate func keyboardWillShow(notification: Notification) {
+  @objc func keyboardWillShow(notification: Notification) {
     adjustInsetForKeyboard(isShow: true, notification: notification)
   }
   
-  @objc fileprivate func keyboardWillHide(notification: Notification) {
+  @objc func keyboardWillHide(notification: Notification) {
     adjustInsetForKeyboard(isShow: false, notification: notification)
   }
   
-  @objc fileprivate func openZoomingController(sender: AnyObject) {
+  @objc func openZoomingController(sender: AnyObject) {
     performSegue(withIdentifier: "zooming", sender: nil)
   }
   

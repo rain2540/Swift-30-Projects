@@ -38,8 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CAAnimationDelegate {
       window.makeKeyAndVisible()
     }
     
-    // hide the status bar
-    UIApplication.shared.isStatusBarHidden = true
     return true
   }
   
@@ -60,14 +58,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CAAnimationDelegate {
     keyFrameAnimation.keyTimes = [0, 0.3, 1]
     
     // add animation to current view
-    keyFrameAnimation.timingFunctions = [
-        CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut),
-        CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-    ]
+    keyFrameAnimation.timingFunctions = [CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut), CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)]
     mask!.add(keyFrameAnimation, forKey: "bounds")
   }
-
-  // MARK: - CAAnimationDelegate
+  
   func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
     imageView?.layer.mask = nil
   }
